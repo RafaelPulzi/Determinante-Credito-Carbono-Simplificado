@@ -30,10 +30,6 @@ O programa oferece as seguintes funcionalidades:
 1. Certifique-se de ter as dependências instaladas.
 2. Execute o script Python. (Recomendada a IDE Visual Studio Code, pois nela você encontrará uma interface intuitiva e repleta de recursos que facilitam o desenvolvimento, depuração e gerenciamento de projetos de programação)
 
-
-python nome_do_arquivo.py
-
-Siga as instruções no terminal para selecionar as opções desejadas.
 Notas Importantes:
 
 - Os dados coletados são registrados em tabelas Excel.
