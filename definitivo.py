@@ -104,11 +104,7 @@ preco = float(data["data"]["amount"])
 
 dados = {}
 
-tabela_nome = criar_tabela()
-tabela_existente = load_workbook(tabela_nome)
-bdarvores_page = tabela_existente['bdArvores']
 
-tabela_nome_mais_recente = obter_tabela_mais_recente()
 
 
 while True:
@@ -231,6 +227,11 @@ while True:
             # os.system('clear' if os.name == 'posix' else 'cls') 
             
             arvoresDoLaco = input('Quantas arvores temos dessa especie: ')
+            tabela_nome = criar_tabela()
+            tabela_existente = load_workbook(tabela_nome)
+            bdarvores_page = tabela_existente['bdArvores']
+
+            tabela_nome_mais_recente = obter_tabela_mais_recente()
 
             try:
                 arvoresDoLaco = int(arvoresDoLaco)
