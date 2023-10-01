@@ -1,100 +1,11 @@
 import random
 from time import sleep
-import glob
 import pandas as pd
 import requests
-from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
+from funcoes import tabela_criacao as tc
+from funcoes import tabela_leitura as tl
 import os
-
-
-def criar_tabela():
-    diretorio = "./Tabelas"  # Diretório atual, você pode alterar se desejar
-    nome_base = "BDinfoArvores"
-    extensao = ".xlsx"
-    contador = 1
-
-    while True:
-        nome_tabela = f"{nome_base}_{contador}{extensao}"
-        caminho_tabela = os.path.join(diretorio, nome_tabela)
-        if not os.path.exists(caminho_tabela):
-            tabela = Workbook()
-            bdarvores_page = tabela.create_sheet('bdArvores')
-            bdarvores_page.append(['arvore', 'dap', 'altura'])  # Adicione os cabeçalhos à nova tabela
-            tabela.save(filename=caminho_tabela)
-            return caminho_tabela
-        contador += 1
-
-def exibir_dados_da_tabela(nome_tabela):
-    if os.path.exists(nome_tabela):
-        wb = load_workbook(nome_tabela)
-        sheet = wb['bdArvores']
-        print('Exibindo dados da tabela:')
-        for row in sheet.iter_rows(values_only=True):
-            print(row)
-    else:
-        print(f'A tabela {nome_tabela} não existe.')
-
-def ler_tabela_excel():
-    diretorio = "./Tabelas"  # Diretório atual, você pode alterar se desejar
-    arquivos = os.listdir(diretorio)
-    
-    if not arquivos:
-        print("Não há tabelas no diretório.")
-        return None  # Retorna None se não houver tabelas
-    
-    print("Tabelas disponíveis:")
-    for i, arquivo in enumerate(arquivos, start=1):
-        print(f"{i}. {arquivo}")
-    
-    escolha = input("Escolha o número da tabela que deseja ler (ou pressione Enter para voltar ao menu): ")
-    
-    if escolha == "":
-        return None  # Retorna None se o usuário optar por voltar ao menu
-    
-    try:
-        escolha = int(escolha)
-        if 1 <= escolha <= len(arquivos):
-            arquivo_escolhido = arquivos[escolha - 1]
-            caminho_arquivo = os.path.join(diretorio, arquivo_escolhido)
-
-            wb = load_workbook(caminho_arquivo)
-            sheet = wb['bdArvores']
-            print(f'Lendo dados da tabela: {arquivo_escolhido}')
-            for row in sheet.iter_rows(values_only=True):
-                print(row)
-            
-            while True:
-                voltar_opcao = input("Digite 'T' para voltar para a escolha de tabelas ou 'M' para voltar ao menu: ").upper()
-                if voltar_opcao == 'T':
-                    return None  # Retorna None para voltar à escolha de tabelas
-                elif voltar_opcao == 'M':
-                    return 'menu'  # Retorna 'menu' para voltar ao menu principal
-                else:
-                    print("Opção inválida. Digite 'T' para voltar para a escolha de tabelas ou 'M' para voltar ao menu.")
-        else:
-            print("Escolha inválida.")
-    except ValueError:
-        print("Escolha inválida.")  
-
-
-def obter_tabela_mais_recente():
-    diretorio = "./Tabelas"  # Diretório atual, você pode alterar se desejar
-    
-    # Obtenha uma lista de todos os arquivos .xlsx no diretório
-    arquivos_xlsx = glob.glob(os.path.join(diretorio, "*.xlsx"))
-    
-    # Ordene a lista de arquivos por data de modificação (o arquivo mais recente será o último)
-    arquivos_xlsx.sort(key=os.path.getmtime)
-    
-    # Verifique se há pelo menos um arquivo .xlsx no diretório
-    if arquivos_xlsx:
-        # Pegue o nome do arquivo mais recente
-        arquivo_mais_recente = arquivos_xlsx[-1]
-        return arquivo_mais_recente
-    else:
-        return None  # Retorna None se não houver tabelas no diretório
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 arvore = arvoresParaFor = 0
 
@@ -227,11 +138,11 @@ while True:
             # os.system('clear' if os.name == 'posix' else 'cls') 
             
             arvoresDoLaco = input('Quantas arvores temos dessa especie: ')
-            tabela_nome = criar_tabela()
+            tabela_nome = tc.criar_tabela()
             tabela_existente = load_workbook(tabela_nome)
             bdarvores_page = tabela_existente['bdArvores']
 
-            tabela_nome_mais_recente = obter_tabela_mais_recente()
+            tabela_nome_mais_recente = tl.obter_tabela_mais_recente()
 
             try:
                 arvoresDoLaco = int(arvoresDoLaco)
@@ -332,7 +243,7 @@ while True:
                     sleep(5)
 
     elif escolherTratamento == 3:
-        resultado = ler_tabela_excel()
+        resultado = tl.ler_tabela_excel()
         if resultado == 'menu':
             break  # Sai do loop principal e encerra o programa
         elif resultado is None:
